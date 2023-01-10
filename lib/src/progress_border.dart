@@ -21,11 +21,13 @@ class ProgressBorder extends BoxBorder {
     this.bottom = BorderSide.none,
     this.left = BorderSide.none,
     this.progress,
+    this.backgroundBorder,
   });
 
   const ProgressBorder.fromBorderSide(
     BorderSide side, [
     this.progress,
+    this.backgroundBorder,
   ])  : top = side,
         right = side,
         bottom = side,
@@ -35,6 +37,7 @@ class ProgressBorder extends BoxBorder {
     BorderSide vertical = BorderSide.none,
     BorderSide horizontal = BorderSide.none,
     this.progress,
+    this.backgroundBorder,
   })  : left = vertical,
         top = horizontal,
         right = vertical,
@@ -45,10 +48,14 @@ class ProgressBorder extends BoxBorder {
     double width = 1.0,
     BorderStyle style = BorderStyle.solid,
     double? progress,
+    Border? backgroundBorder,
   }) {
-    final BorderSide side =
-        BorderSide(color: color, width: width, style: style);
-    return ProgressBorder.fromBorderSide(side, progress);
+    final BorderSide side = BorderSide(
+      color: color,
+      width: width,
+      style: style,
+    );
+    return ProgressBorder.fromBorderSide(side, progress, backgroundBorder);
   }
 
   static ProgressBorder merge(ProgressBorder a, ProgressBorder b) {
@@ -62,8 +69,16 @@ class ProgressBorder extends BoxBorder {
       bottom: BorderSide.merge(a.bottom, b.bottom),
       left: BorderSide.merge(a.left, b.left),
       progress: a.progress,
+      backgroundBorder: a.backgroundBorder == null
+          ? b.backgroundBorder
+          : b.backgroundBorder == null
+              ? a.backgroundBorder
+              : Border.merge(a.backgroundBorder!, b.backgroundBorder!),
     );
   }
+
+  /// paint a complete border under the progress border.
+  final Border? backgroundBorder;
 
   @override
   final BorderSide top;
@@ -133,6 +148,7 @@ class ProgressBorder extends BoxBorder {
       bottom: bottom.scale(t),
       left: left.scale(t),
       progress: progress,
+      backgroundBorder: backgroundBorder?.scale(t),
     );
   }
 
@@ -169,6 +185,14 @@ class ProgressBorder extends BoxBorder {
     BoxShape shape = BoxShape.rectangle,
     BorderRadius? borderRadius,
   }) {
+    backgroundBorder?.paint(
+      canvas,
+      rect,
+      textDirection: textDirection,
+      shape: shape,
+      borderRadius: borderRadius,
+    );
+
     if (isUniform) {
       switch (top.style) {
         case BorderStyle.none:

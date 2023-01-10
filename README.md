@@ -10,6 +10,7 @@ A BoxBorder like Border but draw part of the border according to the progress, s
 
 - ✅ Draw part of border
 - ✅ Supported circle, reactangle
+- ✅ Background Border under progress border
 - 🚧 PathMetric cache
 - 🚧 Custom Paint
 

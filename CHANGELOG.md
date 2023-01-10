@@ -1,3 +1,8 @@
+## 0.0.2
+
+* Add backgroundBorder
+
 ## 0.0.1
 
-* TODO: Describe initial release.
+* Draw part of border
+* Supported circle, reactangle
