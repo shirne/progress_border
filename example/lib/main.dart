@@ -95,6 +95,10 @@ class _MyHomePageState extends State<MyHomePage>
                     color: Colors.blue,
                     width: 8,
                     progress: animationController.value,
+                    backgroundBorder: Border.all(
+                      color: Colors.grey[350]!,
+                      width: 8,
+                    ),
                   ),
                 ),
               ),
