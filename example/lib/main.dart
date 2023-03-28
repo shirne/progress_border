@@ -127,12 +127,29 @@ class _MyHomePageState extends State<MyHomePage>
                 height: 100,
                 decoration: BoxDecoration(
                   color: Colors.blue.withAlpha(100),
-                  border: animationController.value >= 1
-                      ? Border.all(
-                          color: Colors.blue,
-                          width: 8,
-                        )
-                      : null,
+                  border: ProgressBorder.all(
+                    color: Colors.blue,
+                    width: 8,
+                    strokeAlign: BorderSide.strokeAlignCenter,
+                    progress: animationController.value,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: Colors.blue.withAlpha(100),
+                  border: ProgressBorder.all(
+                    color: Colors.blue,
+                    width: 8,
+                    strokeAlign: BorderSide.strokeAlignOutside,
+                    progress: animationController.value,
+                  ),
                 ),
               ),
             ),
