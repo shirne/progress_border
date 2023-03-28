@@ -127,12 +127,12 @@ class _MyHomePageState extends State<MyHomePage>
                 height: 100,
                 decoration: BoxDecoration(
                   color: Colors.blue.withAlpha(100),
-                  border: animationController.value >= 1
-                      ? Border.all(
-                          color: Colors.blue,
-                          width: 8,
-                        )
-                      : null,
+                  border: ProgressBorder.all(
+                    color: Colors.blue,
+                    width: 8,
+                    strokeAlign: StrokeAlign.outside,
+                    progress: animationController.value,
+                  ),
                 ),
               ),
             ),

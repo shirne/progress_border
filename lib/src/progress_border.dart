@@ -47,6 +47,7 @@ class ProgressBorder extends BoxBorder {
     Color color = const Color(0xFF000000),
     double width = 1.0,
     BorderStyle style = BorderStyle.solid,
+    StrokeAlign strokeAlign = StrokeAlign.inside,
     double? progress,
     Border? backgroundBorder,
   }) {
@@ -54,6 +55,7 @@ class ProgressBorder extends BoxBorder {
       color: color,
       width: width,
       style: style,
+      strokeAlign: strokeAlign,
     );
     return ProgressBorder.fromBorderSide(side, progress, backgroundBorder);
   }
@@ -105,7 +107,11 @@ class ProgressBorder extends BoxBorder {
   }
 
   @override
-  bool get isUniform => _colorIsUniform && _widthIsUniform && _styleIsUniform;
+  bool get isUniform =>
+      _colorIsUniform &&
+      _widthIsUniform &&
+      _styleIsUniform &&
+      _strokeAlignIsUniform;
 
   bool get _colorIsUniform {
     final Color topColor = top.color;
@@ -126,6 +132,13 @@ class ProgressBorder extends BoxBorder {
     return right.style == topStyle &&
         bottom.style == topStyle &&
         left.style == topStyle;
+  }
+
+  bool get _strokeAlignIsUniform {
+    final topStrokeAlign = top.strokeAlign;
+    return right.strokeAlign == topStrokeAlign &&
+        bottom.strokeAlign == topStrokeAlign &&
+        left.strokeAlign == topStrokeAlign;
   }
 
   @override
@@ -200,8 +213,10 @@ class ProgressBorder extends BoxBorder {
         case BorderStyle.solid:
           switch (shape) {
             case BoxShape.circle:
-              assert(borderRadius == null,
-                  'A borderRadius can only be given for rectangular boxes.');
+              assert(
+                borderRadius == null,
+                'A borderRadius can only be given for rectangular boxes.',
+              );
               _paintUniformBorderWithCircle(canvas, rect, top, progress ?? 1);
               break;
             case BoxShape.rectangle:
@@ -236,6 +251,8 @@ class ProgressBorder extends BoxBorder {
           if (!_colorIsUniform) ErrorDescription('BorderSide.color'),
           if (!_widthIsUniform) ErrorDescription('BorderSide.width'),
           if (!_styleIsUniform) ErrorDescription('BorderSide.style'),
+          if (!_strokeAlignIsUniform)
+            ErrorDescription('BorderSide.strokeAlign'),
         ]);
       }
       return true;
@@ -303,7 +320,13 @@ class ProgressBorder extends BoxBorder {
   ) {
     assert(side.style != BorderStyle.none);
     final Paint paint = Paint()..color = side.color;
-    final RRect outer = borderRadius.toRRect(rect);
+    RRect outer = borderRadius.toRRect(rect);
+    if (side.strokeAlign != StrokeAlign.inside) {
+      double align = side.strokeAlign == StrokeAlign.center ? 0 : 1;
+      outer = outer.inflate(
+        side.width * (align + 1) / 2,
+      );
+    }
     final double halfWidth = side.width / 2;
     if (halfWidth <= 0.0) {
       paint
@@ -368,6 +391,12 @@ class ProgressBorder extends BoxBorder {
     double progress,
   ) {
     assert(side.style != BorderStyle.none);
+    if (side.strokeAlign != StrokeAlign.inside) {
+      double align = side.strokeAlign == StrokeAlign.center ? 0 : 1;
+      rect = rect.inflate(
+        side.width * (align + 1) / 2,
+      );
+    }
     final double width = side.width;
     final Paint paint = side.toPaint();
     final double radius = (rect.shortestSide - width) / 2.0;
@@ -395,6 +424,12 @@ class ProgressBorder extends BoxBorder {
     double progress,
   ) {
     assert(side.style != BorderStyle.none);
+    if (side.strokeAlign != StrokeAlign.inside) {
+      double align = side.strokeAlign == StrokeAlign.center ? 0 : 1;
+      rect = rect.inflate(
+        side.width * (align + 1) / 2,
+      );
+    }
     final double halfWidth = side.width / 2;
     final Paint paint = side.toPaint();
 

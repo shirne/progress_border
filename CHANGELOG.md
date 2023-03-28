@@ -1,3 +1,7 @@
+## 0.0.3
+
+* Add strokeAlign
+
 ## 0.0.2
 
 * Add backgroundBorder
