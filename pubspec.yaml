@@ -1,7 +1,10 @@
 name: progress_border
 description: A BoxBorder like Border but draw part of the border according to the progress, supported circle, rect, rectangle.
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/shirne/progress_border
+screenshots: 
+  - description: 'cart stepper input'
+    path: preview/preview.gif
 
 environment:
   sdk: '>=2.12.0 <4.0.0'
