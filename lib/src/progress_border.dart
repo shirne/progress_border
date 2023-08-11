@@ -340,19 +340,19 @@ class ProgressBorder extends BoxBorder {
         side.width * (side.strokeAlign - BorderSide.strokeAlignInside) / 2,
       );
     }
-    RRect rRect = borderRadius.toRRect(rect);
 
     final double halfWidth = side.width / 2;
     if (halfWidth <= 0.0) {
       paint.strokeWidth = 0.0;
+      RRect rRect = borderRadius.toRRect(rect);
       canvas.drawRRect(rRect, paint);
     } else {
       _paint(
         canvas,
         Path()
-          ..moveTo(rRect.left + rRect.width / 2, rRect.top + halfWidth)
+          ..moveTo(rect.left + rect.width / 2, rect.top + halfWidth)
           ..relativeLineTo(
-              rRect.width / 2 - borderRadius.topRight.x - halfWidth, 0)
+              rect.width / 2 - borderRadius.topRight.x - halfWidth, 0)
           ..relativeArcToPoint(
               Offset(borderRadius.topRight.x, borderRadius.topRight.y),
               radius: borderRadius.topRight
@@ -360,7 +360,7 @@ class ProgressBorder extends BoxBorder {
               rotation: 90)
           ..relativeLineTo(
               0,
-              rRect.height -
+              rect.height -
                   borderRadius.topRight.y -
                   borderRadius.bottomRight.y -
                   side.width)
@@ -373,7 +373,7 @@ class ProgressBorder extends BoxBorder {
               side.width +
                   borderRadius.bottomRight.x +
                   borderRadius.bottomLeft.x -
-                  rRect.width,
+                  rect.width,
               0)
           ..relativeArcToPoint(
               Offset(-borderRadius.bottomLeft.x, -borderRadius.bottomLeft.y),
@@ -385,7 +385,7 @@ class ProgressBorder extends BoxBorder {
               side.width +
                   borderRadius.bottomLeft.y +
                   borderRadius.topLeft.y -
-                  rRect.height)
+                  rect.height)
           ..relativeArcToPoint(
               Offset(borderRadius.topLeft.x, -borderRadius.topLeft.y),
               radius:

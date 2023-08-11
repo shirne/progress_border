@@ -484,6 +484,71 @@ class _MyHomePageState extends State<MyHomePage>
                 ),
               ],
             ),
+            const Padding(
+              padding: EdgeInsets.only(top: 16, bottom: 8),
+              child: Text('Normal border'),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: Colors.blue,
+                          width: 8,
+                        ),
+                      ),
+                      child: const Text('Inside with background'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: Colors.blue,
+                          width: 8,
+                          strokeAlign: BorderSide.strokeAlignCenter,
+                        ),
+                      ),
+                      child: const Text('Center with background'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: Colors.blue,
+                          width: 8,
+                          strokeAlign: BorderSide.strokeAlignOutside,
+                        ),
+                      ),
+                      child: const Text('Outside with background'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
