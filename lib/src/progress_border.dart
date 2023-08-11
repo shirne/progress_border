@@ -339,16 +339,16 @@ class ProgressBorder extends BoxBorder {
       _paint(
         canvas,
         Path()
-          ..moveTo(rect.left + rect.width / 2, rect.top + halfWidth)
+          ..moveTo(outer.left + outer.width / 2, outer.top + halfWidth)
           ..relativeLineTo(
-              rect.width / 2 - borderRadius.topRight.x - halfWidth, 0)
+              outer.width / 2 - borderRadius.topRight.x - halfWidth, 0)
           ..relativeArcToPoint(
               Offset(borderRadius.topRight.x, borderRadius.topRight.y),
               radius: borderRadius.topRight.deflate(halfWidth / 2),
               rotation: 90)
           ..relativeLineTo(
               0,
-              rect.height -
+              outer.height -
                   borderRadius.topRight.y -
                   borderRadius.bottomRight.y -
                   side.width)
@@ -360,7 +360,7 @@ class ProgressBorder extends BoxBorder {
               side.width +
                   borderRadius.bottomRight.x +
                   borderRadius.bottomLeft.x -
-                  rect.width,
+                  outer.width,
               0)
           ..relativeArcToPoint(
               Offset(-borderRadius.bottomLeft.x, -borderRadius.bottomLeft.y),
@@ -371,7 +371,7 @@ class ProgressBorder extends BoxBorder {
               side.width +
                   borderRadius.bottomLeft.y +
                   borderRadius.topLeft.y -
-                  rect.height)
+                  outer.height)
           ..relativeArcToPoint(
               Offset(borderRadius.topLeft.x, -borderRadius.topLeft.y),
               radius: borderRadius.topLeft.deflate(halfWidth / 2),
