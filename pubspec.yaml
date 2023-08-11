@@ -3,7 +3,7 @@ description: A BoxBorder like Border but draw part of the border according to th
 version: 0.1.2
 homepage: https://github.com/shirne/progress_border
 screenshots: 
-  - description: 'cart stepper input'
+  - description: 'proggress border preview'
     path: preview/preview.gif
 
 environment:
