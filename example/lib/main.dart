@@ -64,80 +64,494 @@ class _MyHomePageState extends State<MyHomePage>
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Center(
-              child: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: Colors.blue.withAlpha(100),
-                  shape: BoxShape.circle,
-                  border: ProgressBorder.all(
-                    color: Colors.blue,
-                    width: 8,
-                    progress: animationController.value,
-                  ),
-                ),
-              ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(top: 16, bottom: 8),
+              child: Text('BoxShape.circle'),
             ),
-          ),
-          Expanded(
-            child: Center(
-              child: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: Colors.blue.withAlpha(100),
-                  borderRadius: BorderRadius.circular(16),
-                  border: ProgressBorder.all(
-                    color: Colors.blue,
-                    width: 8,
-                    progress: animationController.value,
-                    backgroundBorder: Border.all(
-                      color: Colors.grey[350]!,
-                      width: 8,
+            Row(
+              children: [
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        shape: BoxShape.circle,
+                        border: ProgressBorder.all(
+                          color: Colors.blue,
+                          width: 8,
+                          progress: animationController.value,
+                        ),
+                      ),
+                      child: const Text('Inside'),
                     ),
                   ),
                 ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Center(
-              child: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: Colors.blue.withAlpha(100),
-                  border: ProgressBorder.all(
-                    color: Colors.blue,
-                    width: 8,
-                    progress: animationController.value,
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        shape: BoxShape.circle,
+                        border: ProgressBorder.all(
+                          color: Colors.blue,
+                          width: 8,
+                          progress: animationController.value,
+                          strokeAlign: StrokeAlign.center,
+                        ),
+                      ),
+                      child: const Text('Center'),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Center(
-              child: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: Colors.blue.withAlpha(100),
-                  border: ProgressBorder.all(
-                    color: Colors.blue,
-                    width: 8,
-                    strokeAlign: StrokeAlign.outside,
-                    progress: animationController.value,
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        shape: BoxShape.circle,
+                        border: ProgressBorder.all(
+                          color: Colors.blue,
+                          width: 8,
+                          progress: animationController.value,
+                          strokeAlign: StrokeAlign.outside,
+                        ),
+                      ),
+                      child: const Text('Half out(0.5)'),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ),
-        ],
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        shape: BoxShape.circle,
+                        border: ProgressBorder.all(
+                          color: Colors.blue,
+                          width: 8,
+                          progress: animationController.value,
+                          backgroundBorder: Border.all(
+                            color: Colors.black38,
+                            width: 8,
+                          ),
+                        ),
+                      ),
+                      child: const Text('Inside with background'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        shape: BoxShape.circle,
+                        border: ProgressBorder.all(
+                          color: Colors.blue,
+                          width: 8,
+                          progress: animationController.value,
+                          strokeAlign: StrokeAlign.center,
+                          backgroundBorder: Border.all(
+                            color: Colors.black38,
+                            width: 8,
+                            strokeAlign: StrokeAlign.center,
+                          ),
+                        ),
+                      ),
+                      child: const Text('Center with background'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        shape: BoxShape.circle,
+                        border: ProgressBorder.all(
+                          color: Colors.blue,
+                          width: 8,
+                          progress: animationController.value,
+                          strokeAlign: StrokeAlign.outside,
+                          backgroundBorder: Border.all(
+                            color: Colors.black38,
+                            width: 8,
+                            strokeAlign: StrokeAlign.outside,
+                          ),
+                        ),
+                      ),
+                      child: const Text('Outside with background'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top: 16, bottom: 8),
+              child: Text('BoxShape.rectangle(RRect)'),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        borderRadius: BorderRadius.circular(16),
+                        border: ProgressBorder.all(
+                          color: Colors.blue,
+                          width: 8,
+                          progress: animationController.value,
+                        ),
+                      ),
+                      child: const Text('Inside'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        borderRadius: BorderRadius.circular(16),
+                        border: ProgressBorder.all(
+                          color: Colors.blue,
+                          width: 8,
+                          strokeAlign: StrokeAlign.center,
+                          progress: animationController.value,
+                        ),
+                      ),
+                      child: const Text('Center'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        borderRadius: BorderRadius.circular(16),
+                        border: ProgressBorder.all(
+                          color: Colors.blue,
+                          width: 8,
+                          strokeAlign: StrokeAlign.outside,
+                          progress: animationController.value,
+                        ),
+                      ),
+                      child: const Text('Outside'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        borderRadius: BorderRadius.circular(16),
+                        border: ProgressBorder.all(
+                          color: Colors.blue,
+                          width: 8,
+                          progress: animationController.value,
+                          backgroundBorder: Border.all(
+                            color: Colors.black38,
+                            width: 8,
+                          ),
+                        ),
+                      ),
+                      child: const Text('Inside with background'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        borderRadius: BorderRadius.circular(16),
+                        border: ProgressBorder.all(
+                          color: Colors.blue,
+                          width: 8,
+                          strokeAlign: StrokeAlign.center,
+                          progress: animationController.value,
+                          backgroundBorder: Border.all(
+                            color: Colors.black38,
+                            width: 8,
+                            strokeAlign: StrokeAlign.center,
+                          ),
+                        ),
+                      ),
+                      child: const Text('Center with background'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        borderRadius: BorderRadius.circular(16),
+                        border: ProgressBorder.all(
+                          color: Colors.blue,
+                          width: 8,
+                          strokeAlign: StrokeAlign.outside,
+                          progress: animationController.value,
+                          backgroundBorder: Border.all(
+                            color: Colors.black38,
+                            width: 8,
+                            strokeAlign: StrokeAlign.outside,
+                          ),
+                        ),
+                      ),
+                      child: const Text('Outside with background'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top: 16, bottom: 8),
+              child: Text('BoxShape.rectangle(Rect)'),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        border: ProgressBorder.all(
+                          color: Colors.blue,
+                          width: 8,
+                          progress: animationController.value,
+                        ),
+                      ),
+                      child: const Text('Inside'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        border: ProgressBorder.all(
+                          color: Colors.blue,
+                          width: 8,
+                          strokeAlign: StrokeAlign.center,
+                          progress: animationController.value,
+                        ),
+                      ),
+                      child: const Text('Center'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        border: ProgressBorder.all(
+                          color: Colors.blue,
+                          width: 8,
+                          strokeAlign: StrokeAlign.outside,
+                          progress: animationController.value,
+                        ),
+                      ),
+                      child: const Text('Outside'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        border: ProgressBorder.all(
+                          color: Colors.blue,
+                          width: 8,
+                          progress: animationController.value,
+                          backgroundColor: Colors.black38,
+                        ),
+                      ),
+                      child: const Text('Inside with background'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        border: ProgressBorder.all(
+                          color: Colors.blue,
+                          width: 8,
+                          strokeAlign: StrokeAlign.center,
+                          progress: animationController.value,
+                          backgroundColor: Colors.black38,
+                        ),
+                      ),
+                      child: const Text('Center with background'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        border: ProgressBorder.all(
+                          color: Colors.blue,
+                          width: 8,
+                          strokeAlign: StrokeAlign.outside,
+                          progress: animationController.value,
+                          backgroundColor: Colors.black38,
+                        ),
+                      ),
+                      child: const Text('Outside with background'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top: 16, bottom: 8),
+              child: Text('Normal border'),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: Colors.blue,
+                          width: 8,
+                        ),
+                      ),
+                      child: const Text('Inside with background'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: Colors.blue,
+                          width: 8,
+                          strokeAlign: StrokeAlign.center,
+                        ),
+                      ),
+                      child: const Text('Center with background'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withAlpha(100),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: Colors.blue,
+                          width: 8,
+                          strokeAlign: StrokeAlign.outside,
+                        ),
+                      ),
+                      child: const Text('Outside with background'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: restart,
