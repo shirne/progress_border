@@ -1,3 +1,9 @@
+## 0.0.4
+
+* fix rectangle border
+* add backgroundColor for ProgressBorder.all
+* improve example
+
 ## 0.0.3
 
 * Add strokeAlign
