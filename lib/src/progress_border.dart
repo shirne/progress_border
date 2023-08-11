@@ -390,11 +390,12 @@ class ProgressBorder extends BoxBorder {
     double progress,
   ) {
     assert(side.style != BorderStyle.none);
-    if (side.strokeAlign != BorderSide.strokeAlignCenter) {
+    if (side.strokeAlign > BorderSide.strokeAlignInside) {
       rect = rect.inflate(
         side.width * (side.strokeAlign - BorderSide.strokeAlignInside) / 2,
       );
     }
+
     final double width = side.width;
     final Paint paint = side.toPaint();
     final double radius = (rect.shortestSide - width) / 2.0;
