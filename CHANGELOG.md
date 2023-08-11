@@ -1,3 +1,9 @@
+## 0.1.2
+
+* fix rectangle border and circle border
+* add backgroundColor for ProgressBorder.all
+* improve example
+
 ## 0.1.1
 
 * Add screenshots
