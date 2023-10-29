@@ -35,6 +35,8 @@ class _MyHomePageState extends State<MyHomePage>
     vsync: this,
     duration: const Duration(seconds: 10),
   );
+  double borderWidth = 8;
+
   @override
   void initState() {
     super.initState();
@@ -84,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage>
                         shape: BoxShape.circle,
                         border: ProgressBorder.all(
                           color: Colors.blue,
-                          width: 8,
+                          width: borderWidth,
                           progress: animationController.value,
                         ),
                       ),
@@ -103,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage>
                         shape: BoxShape.circle,
                         border: ProgressBorder.all(
                           color: Colors.blue,
-                          width: 8,
+                          width: borderWidth,
                           progress: animationController.value,
                           strokeAlign: BorderSide.strokeAlignCenter,
                         ),
@@ -123,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage>
                         shape: BoxShape.circle,
                         border: ProgressBorder.all(
                           color: Colors.blue,
-                          width: 8,
+                          width: borderWidth,
                           progress: animationController.value,
                           strokeAlign: 0.5,
                         ),
@@ -148,12 +150,9 @@ class _MyHomePageState extends State<MyHomePage>
                         shape: BoxShape.circle,
                         border: ProgressBorder.all(
                           color: Colors.blue,
-                          width: 8,
+                          width: borderWidth,
                           progress: animationController.value,
-                          backgroundBorder: Border.all(
-                            color: Colors.black38,
-                            width: 8,
-                          ),
+                          backgroundColor: Colors.black38,
                         ),
                       ),
                       child: const Text('Inside with background'),
@@ -171,14 +170,10 @@ class _MyHomePageState extends State<MyHomePage>
                         shape: BoxShape.circle,
                         border: ProgressBorder.all(
                           color: Colors.blue,
-                          width: 8,
+                          width: borderWidth,
                           progress: animationController.value,
                           strokeAlign: BorderSide.strokeAlignCenter,
-                          backgroundBorder: Border.all(
-                            color: Colors.black38,
-                            width: 8,
-                            strokeAlign: BorderSide.strokeAlignCenter,
-                          ),
+                          backgroundColor: Colors.black38,
                         ),
                       ),
                       child: const Text('Center with background'),
@@ -196,14 +191,10 @@ class _MyHomePageState extends State<MyHomePage>
                         shape: BoxShape.circle,
                         border: ProgressBorder.all(
                           color: Colors.blue,
-                          width: 8,
+                          width: borderWidth,
                           progress: animationController.value,
                           strokeAlign: BorderSide.strokeAlignOutside,
-                          backgroundBorder: Border.all(
-                            color: Colors.black38,
-                            width: 8,
-                            strokeAlign: BorderSide.strokeAlignOutside,
-                          ),
+                          backgroundColor: Colors.black38,
                         ),
                       ),
                       child: const Text('Outside with background'),
@@ -229,7 +220,7 @@ class _MyHomePageState extends State<MyHomePage>
                         borderRadius: BorderRadius.circular(16),
                         border: ProgressBorder.all(
                           color: Colors.blue,
-                          width: 8,
+                          width: borderWidth,
                           progress: animationController.value,
                         ),
                       ),
@@ -248,7 +239,7 @@ class _MyHomePageState extends State<MyHomePage>
                         borderRadius: BorderRadius.circular(16),
                         border: ProgressBorder.all(
                           color: Colors.blue,
-                          width: 8,
+                          width: borderWidth,
                           strokeAlign: BorderSide.strokeAlignCenter,
                           progress: animationController.value,
                         ),
@@ -268,7 +259,7 @@ class _MyHomePageState extends State<MyHomePage>
                         borderRadius: BorderRadius.circular(16),
                         border: ProgressBorder.all(
                           color: Colors.blue,
-                          width: 8,
+                          width: borderWidth,
                           strokeAlign: BorderSide.strokeAlignOutside,
                           progress: animationController.value,
                         ),
@@ -293,12 +284,9 @@ class _MyHomePageState extends State<MyHomePage>
                         borderRadius: BorderRadius.circular(16),
                         border: ProgressBorder.all(
                           color: Colors.blue,
-                          width: 8,
+                          width: borderWidth,
                           progress: animationController.value,
-                          backgroundBorder: Border.all(
-                            color: Colors.black38,
-                            width: 8,
-                          ),
+                          backgroundColor: Colors.black38,
                         ),
                       ),
                       child: const Text('Inside with background'),
@@ -316,14 +304,10 @@ class _MyHomePageState extends State<MyHomePage>
                         borderRadius: BorderRadius.circular(16),
                         border: ProgressBorder.all(
                           color: Colors.blue,
-                          width: 8,
+                          width: borderWidth,
                           strokeAlign: BorderSide.strokeAlignCenter,
                           progress: animationController.value,
-                          backgroundBorder: Border.all(
-                            color: Colors.black38,
-                            width: 8,
-                            strokeAlign: BorderSide.strokeAlignCenter,
-                          ),
+                          backgroundColor: Colors.black38,
                         ),
                       ),
                       child: const Text('Center with background'),
@@ -341,13 +325,10 @@ class _MyHomePageState extends State<MyHomePage>
                         borderRadius: BorderRadius.circular(16),
                         border: ProgressBorder.all(
                           color: Colors.blue,
-                          width: 8,
+                          width: borderWidth,
                           strokeAlign: BorderSide.strokeAlignOutside,
                           progress: animationController.value,
-                          backgroundBorder: Border.all(
-                              color: Colors.black38,
-                              width: 8,
-                              strokeAlign: BorderSide.strokeAlignOutside),
+                          backgroundColor: Colors.black38,
                         ),
                       ),
                       child: const Text('Outside with background'),
@@ -372,7 +353,7 @@ class _MyHomePageState extends State<MyHomePage>
                         color: Colors.blue.withAlpha(100),
                         border: ProgressBorder.all(
                           color: Colors.blue,
-                          width: 8,
+                          width: borderWidth,
                           progress: animationController.value,
                         ),
                       ),
@@ -390,7 +371,7 @@ class _MyHomePageState extends State<MyHomePage>
                         color: Colors.blue.withAlpha(100),
                         border: ProgressBorder.all(
                           color: Colors.blue,
-                          width: 8,
+                          width: borderWidth,
                           strokeAlign: BorderSide.strokeAlignCenter,
                           progress: animationController.value,
                         ),
@@ -409,7 +390,7 @@ class _MyHomePageState extends State<MyHomePage>
                         color: Colors.blue.withAlpha(100),
                         border: ProgressBorder.all(
                           color: Colors.blue,
-                          width: 8,
+                          width: borderWidth,
                           strokeAlign: BorderSide.strokeAlignOutside,
                           progress: animationController.value,
                         ),
@@ -433,7 +414,7 @@ class _MyHomePageState extends State<MyHomePage>
                         color: Colors.blue.withAlpha(100),
                         border: ProgressBorder.all(
                           color: Colors.blue,
-                          width: 8,
+                          width: borderWidth,
                           progress: animationController.value,
                           backgroundColor: Colors.black38,
                         ),
@@ -452,7 +433,7 @@ class _MyHomePageState extends State<MyHomePage>
                         color: Colors.blue.withAlpha(100),
                         border: ProgressBorder.all(
                           color: Colors.blue,
-                          width: 8,
+                          width: borderWidth,
                           strokeAlign: BorderSide.strokeAlignCenter,
                           progress: animationController.value,
                           backgroundColor: Colors.black38,
@@ -472,7 +453,7 @@ class _MyHomePageState extends State<MyHomePage>
                         color: Colors.blue.withAlpha(100),
                         border: ProgressBorder.all(
                           color: Colors.blue,
-                          width: 8,
+                          width: borderWidth,
                           strokeAlign: BorderSide.strokeAlignOutside,
                           progress: animationController.value,
                           backgroundColor: Colors.black38,
@@ -501,7 +482,7 @@ class _MyHomePageState extends State<MyHomePage>
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           color: Colors.blue,
-                          width: 8,
+                          width: borderWidth,
                         ),
                       ),
                       child: const Text('Inside with background'),
@@ -519,7 +500,7 @@ class _MyHomePageState extends State<MyHomePage>
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           color: Colors.blue,
-                          width: 8,
+                          width: borderWidth,
                           strokeAlign: BorderSide.strokeAlignCenter,
                         ),
                       ),
@@ -538,7 +519,7 @@ class _MyHomePageState extends State<MyHomePage>
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           color: Colors.blue,
-                          width: 8,
+                          width: borderWidth,
                           strokeAlign: BorderSide.strokeAlignOutside,
                         ),
                       ),
@@ -556,6 +537,29 @@ class _MyHomePageState extends State<MyHomePage>
         onPressed: restart,
         tooltip: 'start',
         child: const Icon(Icons.refresh),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        height: kBottomNavigationBarHeight,
+        child: Row(
+          children: [
+            const SizedBox(width: 16),
+            const Text('BorderWidth:'),
+            Expanded(
+              child: Slider(
+                value: borderWidth,
+                min: 0.5,
+                max: 50,
+                onChanged: (v) {
+                  setState(
+                    () {
+                      borderWidth = v;
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
