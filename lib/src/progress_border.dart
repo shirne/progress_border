@@ -225,6 +225,9 @@ class ProgressBorder extends BoxBorder {
 
     if (isUniform) {
       Path? path;
+      Paint paint = top.toPaint()
+        ..strokeCap = ui.StrokeCap.round
+        ..strokeJoin = ui.StrokeJoin.round;
       switch (top.style) {
         case BorderStyle.none:
           return;
@@ -238,13 +241,14 @@ class ProgressBorder extends BoxBorder {
               path = _getUniformBorderWithCirclePath(rect, top);
               break;
             case BoxShape.rectangle:
-              if (borderRadius != null) {
+              if (borderRadius != null && borderRadius != BorderRadius.zero) {
                 path = _getUniformBorderWithRadiusPath(
                   rect,
                   top,
                   borderRadius,
                 );
               } else {
+                paint.strokeJoin = ui.StrokeJoin.miter;
                 path = _getUniformBorderWithRectanglePath(
                   rect,
                   top,
@@ -260,12 +264,12 @@ class ProgressBorder extends BoxBorder {
         _paintMetrics(
           canvas,
           metrics,
-          top.toPaint()..color = backgroundColor!,
+          paint..color = backgroundColor!,
           1,
         );
       }
 
-      _paintMetrics(canvas, metrics, top.toPaint(), progress ?? 1);
+      _paintMetrics(canvas, metrics, paint..color = top.color, progress ?? 1);
       return;
     }
 
@@ -355,56 +359,35 @@ class ProgressBorder extends BoxBorder {
   ) {
     assert(side.style != BorderStyle.none);
 
-    double borderRadiusDeflate = 0.5;
     if (side.strokeAlign > BorderSide.strokeAlignInside) {
-      borderRadiusDeflate /=
-          (side.strokeAlign - BorderSide.strokeAlignInside) * 2;
       rect = rect.inflate(
         side.width * (side.strokeAlign - BorderSide.strokeAlignInside) / 2,
       );
     }
 
     final double halfWidth = side.width / 2;
+    final double deflate = halfWidth * side.strokeAlign;
+
+    final topLeft = borderRadius.topLeft.inflate(deflate);
+    final topRight = borderRadius.topRight.inflate(deflate);
+    final bottomLeft = borderRadius.bottomLeft.inflate(deflate);
+    final bottomRight = borderRadius.bottomRight.inflate(deflate);
+
     return Path()
       ..moveTo(rect.left + rect.width / 2, rect.top + halfWidth)
-      ..relativeLineTo(rect.width / 2 - borderRadius.topRight.x - halfWidth, 0)
-      ..relativeArcToPoint(
-          Offset(borderRadius.topRight.x, borderRadius.topRight.y),
-          radius:
-              borderRadius.topRight.deflate(halfWidth * borderRadiusDeflate),
-          rotation: 90)
+      ..relativeLineTo(rect.width / 2 - topRight.x - halfWidth, 0)
+      ..relativeArcToPoint(Offset(topRight.x, topRight.y),
+          radius: topRight, rotation: 90)
+      ..relativeLineTo(0, rect.height - topRight.y - bottomRight.y - side.width)
+      ..relativeArcToPoint(Offset(-bottomRight.x, bottomRight.y),
+          radius: bottomRight, rotation: 90)
       ..relativeLineTo(
-          0,
-          rect.height -
-              borderRadius.topRight.y -
-              borderRadius.bottomRight.y -
-              side.width)
-      ..relativeArcToPoint(
-          Offset(-borderRadius.bottomRight.x, borderRadius.bottomRight.y),
-          radius:
-              borderRadius.bottomRight.deflate(halfWidth * borderRadiusDeflate),
-          rotation: 90)
-      ..relativeLineTo(
-          side.width +
-              borderRadius.bottomRight.x +
-              borderRadius.bottomLeft.x -
-              rect.width,
-          0)
-      ..relativeArcToPoint(
-          Offset(-borderRadius.bottomLeft.x, -borderRadius.bottomLeft.y),
-          radius:
-              borderRadius.bottomLeft.deflate(halfWidth * borderRadiusDeflate),
-          rotation: 90)
-      ..relativeLineTo(
-          0,
-          side.width +
-              borderRadius.bottomLeft.y +
-              borderRadius.topLeft.y -
-              rect.height)
-      ..relativeArcToPoint(
-          Offset(borderRadius.topLeft.x, -borderRadius.topLeft.y),
-          radius: borderRadius.topLeft.deflate(halfWidth * borderRadiusDeflate),
-          rotation: 90)
+          side.width + bottomRight.x + bottomLeft.x - rect.width, 0)
+      ..relativeArcToPoint(Offset(-bottomLeft.x, -bottomLeft.y),
+          radius: bottomLeft, rotation: 90)
+      ..relativeLineTo(0, side.width + bottomLeft.y + topLeft.y - rect.height)
+      ..relativeArcToPoint(Offset(topLeft.x, -topLeft.y),
+          radius: topLeft, rotation: 90)
       ..close();
   }
 
@@ -467,8 +450,6 @@ class ProgressBorder extends BoxBorder {
     final total = metrics.fold<double>(0, (v, e) => v + e.length);
 
     double target = total * progress;
-    paint.strokeJoin = ui.StrokeJoin.miter;
-    paint.strokeCap = ui.StrokeCap.round;
 
     final iterator = metrics.toList();
 
