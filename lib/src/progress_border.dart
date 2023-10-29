@@ -5,11 +5,13 @@ import 'package:flutter/widgets.dart';
 
 extension RadiusPlus on Radius {
   Radius deflate(double delta) {
-    return Radius.elliptical(x - delta, y - delta);
+    return Radius.elliptical((x - delta).clamp(0, double.infinity),
+        (y - delta).clamp(0, double.infinity));
   }
 
   Radius inflate(double delta) {
-    return Radius.elliptical(x + delta, y + delta);
+    return Radius.elliptical((x + delta).clamp(0, double.infinity),
+        (y + delta).clamp(0, double.infinity));
   }
 }
 
