@@ -1,5 +1,6 @@
 ## 0.1.3
 * improve backgroundPaint
+* fix borderRadius
 
 ## 0.1.2
 
