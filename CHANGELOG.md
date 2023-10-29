@@ -1,3 +1,6 @@
+## 0.1.3
+* improve backgroundPaint
+
 ## 0.1.2
 
 * fix rectangle border and circle border

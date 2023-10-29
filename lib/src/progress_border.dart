@@ -21,12 +21,14 @@ class ProgressBorder extends BoxBorder {
     this.bottom = BorderSide.none,
     this.left = BorderSide.none,
     this.progress,
+    this.backgroundColor,
     this.backgroundBorder,
   });
 
   const ProgressBorder.fromBorderSide(
     BorderSide side, [
     this.progress,
+    this.backgroundColor,
     this.backgroundBorder,
   ])  : top = side,
         right = side,
@@ -37,6 +39,7 @@ class ProgressBorder extends BoxBorder {
     BorderSide vertical = BorderSide.none,
     BorderSide horizontal = BorderSide.none,
     this.progress,
+    this.backgroundColor,
     this.backgroundBorder,
   })  : left = vertical,
         top = horizontal,
@@ -58,15 +61,13 @@ class ProgressBorder extends BoxBorder {
       style: style,
       strokeAlign: strokeAlign,
     );
-    if (backgroundBorder == null && backgroundColor != null) {
-      backgroundBorder = Border.all(
-        color: backgroundColor,
-        width: width,
-        style: style,
-        strokeAlign: strokeAlign,
-      );
-    }
-    return ProgressBorder.fromBorderSide(side, progress, backgroundBorder);
+
+    return ProgressBorder.fromBorderSide(
+      side,
+      progress,
+      backgroundColor,
+      backgroundBorder,
+    );
   }
 
   static ProgressBorder merge(ProgressBorder a, ProgressBorder b) {
@@ -90,6 +91,9 @@ class ProgressBorder extends BoxBorder {
 
   /// paint a complete border under the progress border.
   final Border? backgroundBorder;
+
+  /// paint the backgroundBorder use same path
+  final Color? backgroundColor;
 
   @override
   final BorderSide top;
@@ -170,6 +174,7 @@ class ProgressBorder extends BoxBorder {
       bottom: bottom.scale(t),
       left: left.scale(t),
       progress: progress,
+      backgroundColor: backgroundColor,
       backgroundBorder: backgroundBorder?.scale(t),
     );
   }
@@ -196,6 +201,8 @@ class ProgressBorder extends BoxBorder {
       bottom: BorderSide.lerp(a.bottom, b.bottom, t),
       left: BorderSide.lerp(a.left, b.left, t),
       progress: a.progress,
+      backgroundColor: Color.lerp(a.backgroundColor, b.backgroundColor, t),
+      backgroundBorder: Border.lerp(a.backgroundBorder, b.backgroundBorder, t),
     );
   }
 
@@ -216,6 +223,7 @@ class ProgressBorder extends BoxBorder {
     );
 
     if (isUniform) {
+      Path? path;
       switch (top.style) {
         case BorderStyle.none:
           return;
@@ -226,29 +234,38 @@ class ProgressBorder extends BoxBorder {
                 borderRadius == null,
                 'A borderRadius can only be given for rectangular boxes.',
               );
-              _paintUniformBorderWithCircle(canvas, rect, top, progress ?? 1);
+              path = _getUniformBorderWithCirclePath(rect, top);
               break;
             case BoxShape.rectangle:
               if (borderRadius != null) {
-                _paintUniformBorderWithRadius(
-                  canvas,
+                path = _getUniformBorderWithRadiusPath(
                   rect,
                   top,
                   borderRadius,
-                  progress ?? 1,
                 );
-                return;
+              } else {
+                path = _getUniformBorderWithRectanglePath(
+                  rect,
+                  top,
+                );
               }
-              _paintUniformBorderWithRectangle(
-                canvas,
-                rect,
-                top,
-                progress ?? 1,
-              );
               break;
           }
-          return;
       }
+
+      final metrics = path.computeMetrics(forceClosed: true).toList();
+
+      if (backgroundColor != null) {
+        _paintMetrics(
+          canvas,
+          metrics,
+          top.toPaint()..color = backgroundColor!,
+          1,
+        );
+      }
+
+      _paintMetrics(canvas, metrics, top.toPaint(), progress ?? 1);
+      return;
     }
 
     assert(() {
@@ -320,18 +337,13 @@ class ProgressBorder extends BoxBorder {
     return '${objectRuntimeType(this, 'ProgressBorder')}(${arguments.join(", ")})';
   }
 
-  static void _paintUniformBorderWithRadius(
-    Canvas canvas,
+  static Path _getUniformBorderWithRadiusPath(
     Rect rect,
     BorderSide side,
     BorderRadius borderRadius,
-    double progress,
   ) {
     assert(side.style != BorderStyle.none);
-    final Paint paint = Paint()
-      ..color = side.color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = side.width;
+
     double borderRadiusDeflate = 0.5;
     if (side.strokeAlign > BorderSide.strokeAlignInside) {
       borderRadiusDeflate /=
@@ -342,67 +354,52 @@ class ProgressBorder extends BoxBorder {
     }
 
     final double halfWidth = side.width / 2;
-    if (halfWidth <= 0.0) {
-      paint.strokeWidth = 0.0;
-      RRect rRect = borderRadius.toRRect(rect);
-      canvas.drawRRect(rRect, paint);
-    } else {
-      _paint(
-        canvas,
-        Path()
-          ..moveTo(rect.left + rect.width / 2, rect.top + halfWidth)
-          ..relativeLineTo(
-              rect.width / 2 - borderRadius.topRight.x - halfWidth, 0)
-          ..relativeArcToPoint(
-              Offset(borderRadius.topRight.x, borderRadius.topRight.y),
-              radius: borderRadius.topRight
-                  .deflate(halfWidth * borderRadiusDeflate),
-              rotation: 90)
-          ..relativeLineTo(
-              0,
-              rect.height -
-                  borderRadius.topRight.y -
-                  borderRadius.bottomRight.y -
-                  side.width)
-          ..relativeArcToPoint(
-              Offset(-borderRadius.bottomRight.x, borderRadius.bottomRight.y),
-              radius: borderRadius.bottomRight
-                  .deflate(halfWidth * borderRadiusDeflate),
-              rotation: 90)
-          ..relativeLineTo(
-              side.width +
-                  borderRadius.bottomRight.x +
-                  borderRadius.bottomLeft.x -
-                  rect.width,
-              0)
-          ..relativeArcToPoint(
-              Offset(-borderRadius.bottomLeft.x, -borderRadius.bottomLeft.y),
-              radius: borderRadius.bottomLeft
-                  .deflate(halfWidth * borderRadiusDeflate),
-              rotation: 90)
-          ..relativeLineTo(
-              0,
-              side.width +
-                  borderRadius.bottomLeft.y +
-                  borderRadius.topLeft.y -
-                  rect.height)
-          ..relativeArcToPoint(
-              Offset(borderRadius.topLeft.x, -borderRadius.topLeft.y),
-              radius:
-                  borderRadius.topLeft.deflate(halfWidth * borderRadiusDeflate),
-              rotation: 90)
-          ..close(),
-        paint,
-        progress,
-      );
-    }
+    return Path()
+      ..moveTo(rect.left + rect.width / 2, rect.top + halfWidth)
+      ..relativeLineTo(rect.width / 2 - borderRadius.topRight.x - halfWidth, 0)
+      ..relativeArcToPoint(
+          Offset(borderRadius.topRight.x, borderRadius.topRight.y),
+          radius:
+              borderRadius.topRight.deflate(halfWidth * borderRadiusDeflate),
+          rotation: 90)
+      ..relativeLineTo(
+          0,
+          rect.height -
+              borderRadius.topRight.y -
+              borderRadius.bottomRight.y -
+              side.width)
+      ..relativeArcToPoint(
+          Offset(-borderRadius.bottomRight.x, borderRadius.bottomRight.y),
+          radius:
+              borderRadius.bottomRight.deflate(halfWidth * borderRadiusDeflate),
+          rotation: 90)
+      ..relativeLineTo(
+          side.width +
+              borderRadius.bottomRight.x +
+              borderRadius.bottomLeft.x -
+              rect.width,
+          0)
+      ..relativeArcToPoint(
+          Offset(-borderRadius.bottomLeft.x, -borderRadius.bottomLeft.y),
+          radius:
+              borderRadius.bottomLeft.deflate(halfWidth * borderRadiusDeflate),
+          rotation: 90)
+      ..relativeLineTo(
+          0,
+          side.width +
+              borderRadius.bottomLeft.y +
+              borderRadius.topLeft.y -
+              rect.height)
+      ..relativeArcToPoint(
+          Offset(borderRadius.topLeft.x, -borderRadius.topLeft.y),
+          radius: borderRadius.topLeft.deflate(halfWidth * borderRadiusDeflate),
+          rotation: 90)
+      ..close();
   }
 
-  static void _paintUniformBorderWithCircle(
-    Canvas canvas,
+  static Path _getUniformBorderWithCirclePath(
     Rect rect,
     BorderSide side,
-    double progress,
   ) {
     assert(side.style != BorderStyle.none);
     if (side.strokeAlign > BorderSide.strokeAlignInside) {
@@ -412,30 +409,25 @@ class ProgressBorder extends BoxBorder {
     }
 
     final double width = side.width;
-    final Paint paint = side.toPaint();
+
     final double radius = (rect.shortestSide - width) / 2.0;
     final size = rect.shortestSide;
 
     final left = rect.left + (rect.width - rect.shortestSide) / 2;
     final top = rect.top + (rect.height - rect.shortestSide) / 2;
-    _paint(
-      canvas,
-      Path()
-        ..moveTo(left + size / 2, top + width / 2)
-        ..relativeArcToPoint(Offset(0, size - width),
-            radius: Radius.circular(radius), rotation: 180)
-        ..relativeArcToPoint(Offset(0, width - size),
-            radius: Radius.circular(radius), rotation: 180),
-      paint,
-      progress,
-    );
+
+    return Path()
+      ..moveTo(left + size / 2, top + width / 2)
+      ..relativeArcToPoint(Offset(0, size - width),
+          radius: Radius.circular(radius), rotation: 180)
+      ..relativeArcToPoint(Offset(0, width - size),
+          radius: Radius.circular(radius), rotation: 180)
+      ..close();
   }
 
-  static void _paintUniformBorderWithRectangle(
-    Canvas canvas,
+  static Path _getUniformBorderWithRectanglePath(
     Rect rect,
     BorderSide side,
-    double progress,
   ) {
     assert(side.style != BorderStyle.none);
     if (side.strokeAlign > BorderSide.strokeAlignInside) {
@@ -444,33 +436,14 @@ class ProgressBorder extends BoxBorder {
       );
     }
     final double halfWidth = side.width / 2;
-    final Paint paint = side.toPaint();
 
-    _paint(
-      canvas,
-      Path()
-        ..moveTo(rect.left + rect.width / 2, rect.top + halfWidth)
-        ..relativeLineTo(rect.width / 2 - halfWidth, 0)
-        ..relativeLineTo(0, rect.height - side.width)
-        ..relativeLineTo(side.width - rect.width, 0)
-        ..relativeLineTo(0, side.width - rect.height)
-        ..close(),
-      paint,
-      progress,
-    );
-  }
-
-  static void _paint(
-    Canvas canvas,
-    Path path,
-    Paint paint,
-    double progress,
-  ) {
-    final metrics = path
-        //.transform(matrix.storage)
-        .computeMetrics(forceClosed: true)
-        .toList();
-    _paintMetrics(canvas, metrics, paint, progress);
+    return Path()
+      ..moveTo(rect.left + rect.width / 2, rect.top + halfWidth)
+      ..relativeLineTo(rect.width / 2 - halfWidth, 0)
+      ..relativeLineTo(0, rect.height - side.width)
+      ..relativeLineTo(side.width - rect.width, 0)
+      ..relativeLineTo(0, side.width - rect.height)
+      ..close();
   }
 
   // TODO(shirne) cache metrics?

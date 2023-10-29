@@ -1,6 +1,6 @@
 name: progress_border
 description: A BoxBorder like Border but draw part of the border according to the progress, supported circle, rect, rectangle.
-version: 0.1.2
+version: 0.1.3
 homepage: https://github.com/shirne/progress_border
 screenshots: 
   - description: 'proggress border preview'
