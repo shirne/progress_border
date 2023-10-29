@@ -81,6 +81,7 @@ class ProgressBorder extends BoxBorder {
       bottom: BorderSide.merge(a.bottom, b.bottom),
       left: BorderSide.merge(a.left, b.left),
       progress: a.progress,
+      backgroundColor: a.backgroundColor ?? b.backgroundColor,
       backgroundBorder: a.backgroundBorder == null
           ? b.backgroundBorder
           : b.backgroundBorder == null
@@ -317,11 +318,21 @@ class ProgressBorder extends BoxBorder {
         other.right == right &&
         other.bottom == bottom &&
         other.left == left &&
-        other.progress == progress;
+        other.progress == progress &&
+        other.backgroundColor == backgroundColor &&
+        other.backgroundBorder == backgroundBorder;
   }
 
   @override
-  int get hashCode => Object.hash(top, right, bottom, left, progress);
+  int get hashCode => Object.hash(
+        top,
+        right,
+        bottom,
+        left,
+        progress,
+        backgroundColor,
+        backgroundBorder,
+      );
 
   @override
   String toString() {
