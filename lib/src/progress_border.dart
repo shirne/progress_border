@@ -25,6 +25,8 @@ class ProgressBorder extends BoxBorder {
     this.progress,
     this.backgroundColor,
     this.backgroundBorder,
+    this.gradient,
+    this.backgroundGradient,
   });
 
   const ProgressBorder.fromBorderSide(
@@ -32,6 +34,8 @@ class ProgressBorder extends BoxBorder {
     this.progress,
     this.backgroundColor,
     this.backgroundBorder,
+    this.gradient,
+    this.backgroundGradient,
   ])  : top = side,
         right = side,
         bottom = side,
@@ -43,6 +47,8 @@ class ProgressBorder extends BoxBorder {
     this.progress,
     this.backgroundColor,
     this.backgroundBorder,
+    this.gradient,
+    this.backgroundGradient,
   })  : left = vertical,
         top = horizontal,
         right = vertical,
@@ -56,6 +62,8 @@ class ProgressBorder extends BoxBorder {
     double? progress,
     Color? backgroundColor,
     Border? backgroundBorder,
+    Gradient? gradient,
+    Gradient? backgroundGradient,
   }) {
     final BorderSide side = BorderSide(
       color: color,
@@ -69,6 +77,8 @@ class ProgressBorder extends BoxBorder {
       progress,
       backgroundColor,
       backgroundBorder,
+      gradient,
+      backgroundGradient,
     );
   }
 
@@ -89,6 +99,8 @@ class ProgressBorder extends BoxBorder {
           : b.backgroundBorder == null
               ? a.backgroundBorder
               : Border.merge(a.backgroundBorder!, b.backgroundBorder!),
+      gradient: a.gradient ?? b.gradient,
+      backgroundGradient: a.backgroundGradient ?? b.backgroundGradient,
     );
   }
 
@@ -111,6 +123,10 @@ class ProgressBorder extends BoxBorder {
   final BorderSide left;
 
   final double? progress;
+
+  final Gradient? gradient;
+
+  final Gradient? backgroundGradient;
 
   @override
   EdgeInsetsGeometry get dimensions {
@@ -179,6 +195,8 @@ class ProgressBorder extends BoxBorder {
       progress: progress,
       backgroundColor: backgroundColor,
       backgroundBorder: backgroundBorder?.scale(t),
+      gradient: gradient,
+      backgroundGradient: backgroundGradient,
     );
   }
 
@@ -206,6 +224,12 @@ class ProgressBorder extends BoxBorder {
       progress: a.progress,
       backgroundColor: Color.lerp(a.backgroundColor, b.backgroundColor, t),
       backgroundBorder: Border.lerp(a.backgroundBorder, b.backgroundBorder, t),
+      gradient: Gradient.lerp(a.gradient, b.gradient, t),
+      backgroundGradient: Gradient.lerp(
+        a.backgroundGradient,
+        b.backgroundGradient,
+        t,
+      ),
     );
   }
 
@@ -261,17 +285,23 @@ class ProgressBorder extends BoxBorder {
       }
 
       final metrics = path.computeMetrics(forceClosed: true).toList();
+      final outerRect = rect.inflate(top.width * (top.strokeAlign + 1) / 2);
 
-      if (backgroundColor != null) {
-        _paintMetrics(
-          canvas,
-          metrics,
-          paint..color = backgroundColor!,
-          1,
-        );
+      if (backgroundColor != null || backgroundGradient != null) {
+        if (backgroundColor != null) {
+          paint.color = backgroundColor!;
+        }
+        if (backgroundGradient != null) {
+          paint.shader = backgroundGradient!.createShader(outerRect);
+        }
+        _paintMetrics(canvas, metrics, paint, 1);
       }
 
-      _paintMetrics(canvas, metrics, paint..color = top.color, progress ?? 1);
+      paint.color = top.color;
+      if (gradient != null) {
+        paint.shader = gradient!.createShader(outerRect);
+      }
+      _paintMetrics(canvas, metrics, paint, progress ?? 1);
       return;
     }
 
