@@ -300,6 +300,8 @@ class ProgressBorder extends BoxBorder {
       paint.color = top.color;
       if (gradient != null) {
         paint.shader = gradient!.createShader(outerRect);
+      } else {
+        paint.shader = null;
       }
       _paintMetrics(canvas, metrics, paint, progress ?? 1);
       return;

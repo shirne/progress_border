@@ -1,3 +1,7 @@
+## 0.1.4
+* add gradient painter
+* add backgroundGradient painter
+
 ## 0.1.3
 * improve backgroundPaint
 * fix borderRadius

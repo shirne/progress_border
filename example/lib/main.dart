@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:progress_border/progress_border.dart';
 
@@ -60,6 +62,89 @@ class _MyHomePageState extends State<MyHomePage>
     }
   }
 
+  Widget createSquare(
+    double strokeAlign,
+    String text, {
+    Color? backgroundColor,
+    Gradient? backgroundGradient,
+    Gradient? gradient,
+    BoxShape shape = BoxShape.circle,
+    BorderRadiusGeometry? borderRadius,
+  }) {
+    return Container(
+      width: 100,
+      height: 100,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: Colors.blue.withAlpha(100),
+        shape: shape,
+        borderRadius: borderRadius,
+        border: ProgressBorder.all(
+          color: Colors.blue,
+          width: borderWidth,
+          progress: animationController.value,
+          strokeAlign: strokeAlign,
+          backgroundColor: backgroundColor,
+          backgroundGradient: backgroundGradient,
+          gradient: gradient,
+        ),
+      ),
+      child: Text(text),
+    );
+  }
+
+  Widget createRow({
+    Color? backgroundColor,
+    Gradient? backgroundGradient,
+    Gradient? gradient,
+    BoxShape shape = BoxShape.circle,
+    BorderRadiusGeometry? borderRadius,
+  }) {
+    return Row(
+      children: [
+        Expanded(
+          child: Center(
+            child: createSquare(
+              BorderSide.strokeAlignInside,
+              'Inside',
+              backgroundColor: backgroundColor,
+              backgroundGradient: backgroundGradient,
+              gradient: gradient,
+              shape: shape,
+              borderRadius: borderRadius,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Center(
+            child: createSquare(
+              BorderSide.strokeAlignCenter,
+              'Center',
+              backgroundColor: backgroundColor,
+              backgroundGradient: backgroundGradient,
+              gradient: gradient,
+              shape: shape,
+              borderRadius: borderRadius,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Center(
+            child: createSquare(
+              BorderSide.strokeAlignOutside,
+              'Outside',
+              backgroundColor: backgroundColor,
+              backgroundGradient: backgroundGradient,
+              gradient: gradient,
+              shape: shape,
+              borderRadius: borderRadius,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,397 +158,53 @@ class _MyHomePageState extends State<MyHomePage>
               padding: EdgeInsets.only(top: 16, bottom: 8),
               child: Text('BoxShape.circle'),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withAlpha(100),
-                        shape: BoxShape.circle,
-                        border: ProgressBorder.all(
-                          color: Colors.blue,
-                          width: borderWidth,
-                          progress: animationController.value,
-                        ),
-                      ),
-                      child: const Text('Inside'),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withAlpha(100),
-                        shape: BoxShape.circle,
-                        border: ProgressBorder.all(
-                          color: Colors.blue,
-                          width: borderWidth,
-                          progress: animationController.value,
-                          strokeAlign: BorderSide.strokeAlignCenter,
-                        ),
-                      ),
-                      child: const Text('Center'),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withAlpha(100),
-                        shape: BoxShape.circle,
-                        border: ProgressBorder.all(
-                          color: Colors.blue,
-                          width: borderWidth,
-                          progress: animationController.value,
-                          strokeAlign: 0.5,
-                        ),
-                      ),
-                      child: const Text('Half out(0.5)'),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            createRow(),
             const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withAlpha(100),
-                        shape: BoxShape.circle,
-                        border: ProgressBorder.all(
-                          color: Colors.blue,
-                          width: borderWidth,
-                          progress: animationController.value,
-                          backgroundColor: Colors.black38,
-                        ),
-                      ),
-                      child: const Text('Inside with background'),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withAlpha(100),
-                        shape: BoxShape.circle,
-                        border: ProgressBorder.all(
-                          color: Colors.blue,
-                          width: borderWidth,
-                          progress: animationController.value,
-                          strokeAlign: BorderSide.strokeAlignCenter,
-                          backgroundColor: Colors.black38,
-                        ),
-                      ),
-                      child: const Text('Center with background'),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withAlpha(100),
-                        shape: BoxShape.circle,
-                        border: ProgressBorder.all(
-                          color: Colors.blue,
-                          width: borderWidth,
-                          progress: animationController.value,
-                          strokeAlign: BorderSide.strokeAlignOutside,
-                          backgroundColor: Colors.black38,
-                        ),
-                      ),
-                      child: const Text('Outside with background'),
-                    ),
-                  ),
-                ),
-              ],
+            createRow(
+              gradient: SweepGradient(
+                transform: const GradientRotation(-math.pi / 2 - 0.1),
+                colors: [Colors.blue[200]!, Colors.blue],
+              ),
+              backgroundGradient: const SweepGradient(
+                transform: GradientRotation(-math.pi / 2),
+                colors: [Colors.black26, Colors.black87],
+                stops: [0, 0.95],
+              ),
             ),
             const Padding(
               padding: EdgeInsets.only(top: 16, bottom: 8),
               child: Text('BoxShape.rectangle(RRect)'),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withAlpha(100),
-                        borderRadius: BorderRadius.circular(16),
-                        border: ProgressBorder.all(
-                          color: Colors.blue,
-                          width: borderWidth,
-                          progress: animationController.value,
-                        ),
-                      ),
-                      child: const Text('Inside'),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withAlpha(100),
-                        borderRadius: BorderRadius.circular(16),
-                        border: ProgressBorder.all(
-                          color: Colors.blue,
-                          width: borderWidth,
-                          strokeAlign: BorderSide.strokeAlignCenter,
-                          progress: animationController.value,
-                        ),
-                      ),
-                      child: const Text('Center'),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withAlpha(100),
-                        borderRadius: BorderRadius.circular(16),
-                        border: ProgressBorder.all(
-                          color: Colors.blue,
-                          width: borderWidth,
-                          strokeAlign: BorderSide.strokeAlignOutside,
-                          progress: animationController.value,
-                        ),
-                      ),
-                      child: const Text('Outside'),
-                    ),
-                  ),
-                ),
-              ],
+            createRow(
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(16),
             ),
             const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withAlpha(100),
-                        borderRadius: BorderRadius.circular(16),
-                        border: ProgressBorder.all(
-                          color: Colors.blue,
-                          width: borderWidth,
-                          progress: animationController.value,
-                          backgroundColor: Colors.black38,
-                        ),
-                      ),
-                      child: const Text('Inside with background'),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withAlpha(100),
-                        borderRadius: BorderRadius.circular(16),
-                        border: ProgressBorder.all(
-                          color: Colors.blue,
-                          width: borderWidth,
-                          strokeAlign: BorderSide.strokeAlignCenter,
-                          progress: animationController.value,
-                          backgroundColor: Colors.black38,
-                        ),
-                      ),
-                      child: const Text('Center with background'),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withAlpha(100),
-                        borderRadius: BorderRadius.circular(16),
-                        border: ProgressBorder.all(
-                          color: Colors.blue,
-                          width: borderWidth,
-                          strokeAlign: BorderSide.strokeAlignOutside,
-                          progress: animationController.value,
-                          backgroundColor: Colors.black38,
-                        ),
-                      ),
-                      child: const Text('Outside with background'),
-                    ),
-                  ),
-                ),
-              ],
+            createRow(
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(16),
+              backgroundColor: Colors.black38,
             ),
             const Padding(
               padding: EdgeInsets.only(top: 16, bottom: 8),
               child: Text('BoxShape.rectangle(Rect)'),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withAlpha(100),
-                        border: ProgressBorder.all(
-                          color: Colors.blue,
-                          width: borderWidth,
-                          progress: animationController.value,
-                        ),
-                      ),
-                      child: const Text('Inside'),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withAlpha(100),
-                        border: ProgressBorder.all(
-                          color: Colors.blue,
-                          width: borderWidth,
-                          strokeAlign: BorderSide.strokeAlignCenter,
-                          progress: animationController.value,
-                        ),
-                      ),
-                      child: const Text('Center'),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withAlpha(100),
-                        border: ProgressBorder.all(
-                          color: Colors.blue,
-                          width: borderWidth,
-                          strokeAlign: BorderSide.strokeAlignOutside,
-                          progress: animationController.value,
-                        ),
-                      ),
-                      child: const Text('Outside'),
-                    ),
-                  ),
-                ),
-              ],
+            createRow(
+              shape: BoxShape.rectangle,
             ),
             const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withAlpha(100),
-                        border: ProgressBorder.all(
-                          color: Colors.blue,
-                          width: borderWidth,
-                          progress: animationController.value,
-                          backgroundColor: Colors.black38,
-                        ),
-                      ),
-                      child: const Text('Inside with background'),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withAlpha(100),
-                        border: ProgressBorder.all(
-                          color: Colors.blue,
-                          width: borderWidth,
-                          strokeAlign: BorderSide.strokeAlignCenter,
-                          progress: animationController.value,
-                          backgroundColor: Colors.black38,
-                        ),
-                      ),
-                      child: const Text('Center with background'),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withAlpha(100),
-                        border: ProgressBorder.all(
-                          color: Colors.blue,
-                          width: borderWidth,
-                          strokeAlign: BorderSide.strokeAlignOutside,
-                          progress: animationController.value,
-                          backgroundColor: Colors.black38,
-                        ),
-                      ),
-                      child: const Text('Outside with background'),
-                    ),
-                  ),
-                ),
-              ],
+            createRow(
+              shape: BoxShape.rectangle,
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomCenter,
+                colors: [Colors.blue[200]!, Colors.blue],
+              ),
+              backgroundGradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomCenter,
+                colors: [Colors.black26, Colors.black54],
+              ),
             ),
             const Padding(
               padding: EdgeInsets.only(top: 16, bottom: 8),
