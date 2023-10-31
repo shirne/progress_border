@@ -1,3 +1,6 @@
+## 0.1.5
+* add clockwise
+
 ## 0.1.4
 * add gradient painter
 * add backgroundGradient painter

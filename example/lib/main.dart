@@ -70,6 +70,7 @@ class _MyHomePageState extends State<MyHomePage>
     Gradient? gradient,
     BoxShape shape = BoxShape.circle,
     BorderRadiusGeometry? borderRadius,
+    bool clockwise = true,
   }) {
     return Container(
       width: 100,
@@ -87,6 +88,7 @@ class _MyHomePageState extends State<MyHomePage>
           backgroundColor: backgroundColor,
           backgroundGradient: backgroundGradient,
           gradient: gradient,
+          clockwise: clockwise,
         ),
       ),
       child: Text(text),
@@ -99,6 +101,7 @@ class _MyHomePageState extends State<MyHomePage>
     Gradient? gradient,
     BoxShape shape = BoxShape.circle,
     BorderRadiusGeometry? borderRadius,
+    bool clockwise = true,
   }) {
     return Row(
       children: [
@@ -112,6 +115,7 @@ class _MyHomePageState extends State<MyHomePage>
               gradient: gradient,
               shape: shape,
               borderRadius: borderRadius,
+              clockwise: clockwise,
             ),
           ),
         ),
@@ -125,6 +129,7 @@ class _MyHomePageState extends State<MyHomePage>
               gradient: gradient,
               shape: shape,
               borderRadius: borderRadius,
+              clockwise: clockwise,
             ),
           ),
         ),
@@ -138,6 +143,7 @@ class _MyHomePageState extends State<MyHomePage>
               gradient: gradient,
               shape: shape,
               borderRadius: borderRadius,
+              clockwise: clockwise,
             ),
           ),
         ),
@@ -178,12 +184,14 @@ class _MyHomePageState extends State<MyHomePage>
             createRow(
               shape: BoxShape.rectangle,
               borderRadius: BorderRadius.circular(16),
+              clockwise: false,
             ),
             const SizedBox(height: 20),
             createRow(
               shape: BoxShape.rectangle,
               borderRadius: BorderRadius.circular(16),
               backgroundColor: Colors.black38,
+              clockwise: false,
             ),
             const Padding(
               padding: EdgeInsets.only(top: 16, bottom: 8),

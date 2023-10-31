@@ -27,6 +27,7 @@ class ProgressBorder extends BoxBorder {
     this.backgroundBorder,
     this.gradient,
     this.backgroundGradient,
+    this.clockwise = true,
   });
 
   const ProgressBorder.fromBorderSide(
@@ -36,6 +37,7 @@ class ProgressBorder extends BoxBorder {
     this.backgroundBorder,
     this.gradient,
     this.backgroundGradient,
+    this.clockwise = true,
   ])  : top = side,
         right = side,
         bottom = side,
@@ -49,6 +51,7 @@ class ProgressBorder extends BoxBorder {
     this.backgroundBorder,
     this.gradient,
     this.backgroundGradient,
+    this.clockwise = true,
   })  : left = vertical,
         top = horizontal,
         right = vertical,
@@ -64,6 +67,7 @@ class ProgressBorder extends BoxBorder {
     Border? backgroundBorder,
     Gradient? gradient,
     Gradient? backgroundGradient,
+    bool clockwise = true,
   }) {
     final BorderSide side = BorderSide(
       color: color,
@@ -79,6 +83,7 @@ class ProgressBorder extends BoxBorder {
       backgroundBorder,
       gradient,
       backgroundGradient,
+      clockwise,
     );
   }
 
@@ -101,6 +106,7 @@ class ProgressBorder extends BoxBorder {
               : Border.merge(a.backgroundBorder!, b.backgroundBorder!),
       gradient: a.gradient ?? b.gradient,
       backgroundGradient: a.backgroundGradient ?? b.backgroundGradient,
+      clockwise: a.clockwise,
     );
   }
 
@@ -124,9 +130,13 @@ class ProgressBorder extends BoxBorder {
 
   final double? progress;
 
+  /// Gradient painter for progressed border
   final Gradient? gradient;
 
+  /// Gradient painter for background border
   final Gradient? backgroundGradient;
+
+  final bool clockwise;
 
   @override
   EdgeInsetsGeometry get dimensions {
@@ -197,6 +207,7 @@ class ProgressBorder extends BoxBorder {
       backgroundBorder: backgroundBorder?.scale(t),
       gradient: gradient,
       backgroundGradient: backgroundGradient,
+      clockwise: clockwise,
     );
   }
 
@@ -230,6 +241,7 @@ class ProgressBorder extends BoxBorder {
         b.backgroundGradient,
         t,
       ),
+      clockwise: t > 0.5 ? b.clockwise : a.clockwise,
     );
   }
 
@@ -264,7 +276,7 @@ class ProgressBorder extends BoxBorder {
                 borderRadius == null,
                 'A borderRadius can only be given for rectangular boxes.',
               );
-              path = _getUniformBorderWithCirclePath(rect, top);
+              path = _getUniformBorderWithCirclePath(rect, top, clockwise);
               break;
             case BoxShape.rectangle:
               if (borderRadius != null && borderRadius != BorderRadius.zero) {
@@ -272,13 +284,11 @@ class ProgressBorder extends BoxBorder {
                   rect,
                   top,
                   borderRadius,
+                  clockwise,
                 );
               } else {
                 paint.strokeJoin = ui.StrokeJoin.miter;
-                path = _getUniformBorderWithRectanglePath(
-                  rect,
-                  top,
-                );
+                path = _getUniformBorderWithRectanglePath(rect, top, clockwise);
               }
               break;
           }
@@ -390,6 +400,7 @@ class ProgressBorder extends BoxBorder {
     Rect rect,
     BorderSide side,
     BorderRadius borderRadius,
+    bool clockwise,
   ) {
     assert(side.style != BorderStyle.none);
 
@@ -407,27 +418,49 @@ class ProgressBorder extends BoxBorder {
     final bottomLeft = borderRadius.bottomLeft.inflate(deflate);
     final bottomRight = borderRadius.bottomRight.inflate(deflate);
 
-    return Path()
-      ..moveTo(rect.left + rect.width / 2, rect.top + halfWidth)
-      ..relativeLineTo(rect.width / 2 - topRight.x - halfWidth, 0)
-      ..relativeArcToPoint(Offset(topRight.x, topRight.y),
-          radius: topRight, rotation: 90)
-      ..relativeLineTo(0, rect.height - topRight.y - bottomRight.y - side.width)
-      ..relativeArcToPoint(Offset(-bottomRight.x, bottomRight.y),
-          radius: bottomRight, rotation: 90)
-      ..relativeLineTo(
-          side.width + bottomRight.x + bottomLeft.x - rect.width, 0)
-      ..relativeArcToPoint(Offset(-bottomLeft.x, -bottomLeft.y),
-          radius: bottomLeft, rotation: 90)
-      ..relativeLineTo(0, side.width + bottomLeft.y + topLeft.y - rect.height)
-      ..relativeArcToPoint(Offset(topLeft.x, -topLeft.y),
-          radius: topLeft, rotation: 90)
-      ..close();
+    final path = Path()
+      ..moveTo(rect.left + rect.width / 2, rect.top + halfWidth);
+    if (clockwise) {
+      path
+        ..relativeLineTo(rect.width / 2 - topRight.x - halfWidth, 0)
+        ..relativeArcToPoint(Offset(topRight.x, topRight.y),
+            radius: topRight, rotation: 90)
+        ..relativeLineTo(
+            0, rect.height - topRight.y - bottomRight.y - side.width)
+        ..relativeArcToPoint(Offset(-bottomRight.x, bottomRight.y),
+            radius: bottomRight, rotation: 90)
+        ..relativeLineTo(
+            side.width + bottomRight.x + bottomLeft.x - rect.width, 0)
+        ..relativeArcToPoint(Offset(-bottomLeft.x, -bottomLeft.y),
+            radius: bottomLeft, rotation: 90)
+        ..relativeLineTo(0, side.width + bottomLeft.y + topLeft.y - rect.height)
+        ..relativeArcToPoint(Offset(topLeft.x, -topLeft.y),
+            radius: topLeft, rotation: 90);
+    } else {
+      path
+        ..relativeLineTo(topLeft.x + halfWidth - rect.width / 2, 0)
+        ..relativeArcToPoint(Offset(-topLeft.x, topLeft.y),
+            radius: topLeft, rotation: 90, clockwise: false)
+        ..relativeLineTo(0, rect.height - topLeft.y - bottomLeft.y - side.width)
+        ..relativeArcToPoint(Offset(bottomLeft.x, bottomLeft.y),
+            radius: bottomLeft, rotation: 90, clockwise: false)
+        ..relativeLineTo(
+            rect.width - side.width - bottomRight.x - bottomLeft.x, 0)
+        ..relativeArcToPoint(Offset(bottomRight.x, -bottomRight.y),
+            radius: bottomRight, rotation: 90, clockwise: false)
+        ..relativeLineTo(
+            0, side.width + bottomRight.y + topRight.y - rect.height)
+        ..relativeArcToPoint(Offset(-topRight.x, -topRight.y),
+            radius: topRight, rotation: 90, clockwise: false);
+    }
+
+    return path..close();
   }
 
   static Path _getUniformBorderWithCirclePath(
     Rect rect,
     BorderSide side,
+    bool clockwise,
   ) {
     assert(side.style != BorderStyle.none);
     if (side.strokeAlign > BorderSide.strokeAlignInside) {
@@ -446,16 +479,25 @@ class ProgressBorder extends BoxBorder {
 
     return Path()
       ..moveTo(left + size / 2, top + width / 2)
-      ..relativeArcToPoint(Offset(0, size - width),
-          radius: Radius.circular(radius), rotation: 180)
-      ..relativeArcToPoint(Offset(0, width - size),
-          radius: Radius.circular(radius), rotation: 180)
+      ..relativeArcToPoint(
+        Offset(0, size - width),
+        radius: Radius.circular(radius),
+        rotation: 180,
+        clockwise: clockwise,
+      )
+      ..relativeArcToPoint(
+        Offset(0, width - size),
+        radius: Radius.circular(radius),
+        rotation: 180,
+        clockwise: clockwise,
+      )
       ..close();
   }
 
   static Path _getUniformBorderWithRectanglePath(
     Rect rect,
     BorderSide side,
+    bool clockwise,
   ) {
     assert(side.style != BorderStyle.none);
     if (side.strokeAlign > BorderSide.strokeAlignInside) {
@@ -465,16 +507,26 @@ class ProgressBorder extends BoxBorder {
     }
     final double halfWidth = side.width / 2;
 
-    return Path()
-      ..moveTo(rect.left + rect.width / 2, rect.top + halfWidth)
-      ..relativeLineTo(rect.width / 2 - halfWidth, 0)
-      ..relativeLineTo(0, rect.height - side.width)
-      ..relativeLineTo(side.width - rect.width, 0)
-      ..relativeLineTo(0, side.width - rect.height)
-      ..close();
+    final path = Path()
+      ..moveTo(rect.left + rect.width / 2, rect.top + halfWidth);
+
+    if (clockwise) {
+      path
+        ..relativeLineTo(rect.width / 2 - halfWidth, 0)
+        ..relativeLineTo(0, rect.height - side.width)
+        ..relativeLineTo(side.width - rect.width, 0)
+        ..relativeLineTo(0, side.width - rect.height);
+    } else {
+      path
+        ..relativeLineTo(halfWidth - rect.width / 2, 0)
+        ..relativeLineTo(0, rect.height - side.width)
+        ..relativeLineTo(rect.width - side.width, 0)
+        ..relativeLineTo(0, side.width - rect.height);
+    }
+
+    return path..close();
   }
 
-  // TODO(shirne) cache metrics?
   static void _paintMetrics(
     Canvas canvas,
     List<ui.PathMetric> metrics,
