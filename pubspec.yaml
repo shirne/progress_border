@@ -5,6 +5,9 @@ homepage: https://github.com/shirne/progress_border
 screenshots: 
   - description: 'proggress border preview'
     path: preview/preview.gif
+topics: 
+  - border
+  - progress
 
 environment:
   sdk: '>=2.14.0 <4.0.0'
